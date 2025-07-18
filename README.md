@@ -110,20 +110,6 @@ La banda transportadora fue descartada debido a limitaciones físicas en la maqu
 
 ## Análisis de costos
 
-### Prototipo (maqueta de pruebas)
-
-| Componente                           | Estado      | Costo estimado (COP) |
-|-------------------------------------|-------------|-----------------------|
-| Sensor de movimiento SR501          | A comprar   | 7,000                 |
-| Motor DC                            | Adquirido   | 0                     |
-| Sensores infrarrojos x2             | Adquiridos  | 0                     |
-| LEDs                                | Adquiridos  | 0                     |
-| Sensor DHT11 (temp. y humedad)      | Adquirido   | 0                     |
-| Ventilador                          | Adquirido   | 0                     |
-| Raspberry Pi Pico                   | Adquirida   | 0                     |
-| Material para maqueta               | A comprar   | 10,000                |
-| **Total estimado prototipo**        |             | **17,000 COP**        |
-
 ### Estimación de producción
 
 | Concepto                            | Costo unitario (COP) |
