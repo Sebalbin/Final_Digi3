@@ -80,7 +80,7 @@ La banda transportadora fue descartada debido a limitaciones físicas en la maqu
 | Lectura de temperatura y humedad     | ✅        |
 | Activación de ventilador             | ✅        |
 | Iluminación por detección de PIR     | ✅        |
-| Activación de motor por botón        | ❌        |
+| Activación de motor por botón        | ✅        |
 
 > 🔧 *El motor fue omitido en el prototipo final.*
 
@@ -90,7 +90,7 @@ La banda transportadora fue descartada debido a limitaciones físicas en la maqu
 |--------------------------------------|----------|
 | Precisión en conteo                  | ✅        |
 | Confiabilidad de procesamiento       | ✅        |
-| Bajo consumo energético              | ✅        |
+| Bajo consumo energético              |  X       |
 | Respuesta coherente a entradas       | ✅        |
 | Facilidad de uso                     | ✅        |
 | Mantenibilidad (modularidad del código) | ✅    |
@@ -102,7 +102,7 @@ La banda transportadora fue descartada debido a limitaciones físicas en la maqu
 | Funcionalidad                       | Técnica utilizada |
 |------------------------------------|-------------------|
 | Lectura del sensor DHT11           | Polling           |
-| Detección de objetos (IR)          | Polling           |
+| Detección de objetos (IR)          | Interrupciones    |
 | Activación por movimiento (PIR)    | Polling           |
 | Lectura de botones físicos         | Interrupciones    |
 
