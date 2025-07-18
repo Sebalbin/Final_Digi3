@@ -9,74 +9,108 @@ El interés en este trabajo radica en la automatización de los controles de un 
 **FoodCare** es un sistema embebido diseñado para controlar de forma eficiente y automatizada un entorno de manipulación de alimentos. Este sistema tiene como objetivo:
 
 - Monitorear las condiciones ambientales de una bodega (temperatura y humedad).
-- Controlar la entrada y salida de productos mediante conteo automático con sensores de interrupción y una banda transportadora.
+- Controlar la entrada y salida de productos mediante conteo automático con sensores de interrupción.
 - Gestionar la iluminación del entorno según la presencia humana.
 
 ### El sistema contempla:
 
 - ✅ Conteo automatizado de productos en entrada y salida.  
-- ⚙️ Control de motor DC para banda transportadora.  
 - 🌬️ Control de ventilación según humedad.  
 - 💡 Iluminación activada por sensor de movimiento.  
 - 🌡️ Monitoreo constante de temperatura y humedad.
 
 ---
 
-## Requisitos funcionales
+## Cambios respecto a la propuesta inicial
 
-### Conteo de productos entrantes y salientes
+A continuación, se presenta una tabla con los elementos propuestos inicialmente y los cambios realizados:
 
-- El sistema debe detectar productos que ingresan o salen usando sensores infrarrojos.  
-- El conteo debe mantenerse actualizado en memoria.
+| Elemento                         | Propuesta inicial                            | Propuesta final                                |
+|----------------------------------|-----------------------------------------------|-------------------------------------------------|
+| Conteo de productos              | Sensores IR en entrada y salida              | ✅ Implementado                                 |
+| Banda transportadora             | Motor DC activado por botón                  | ❌ No se implementó (por logística de maqueta)  |
+| Control de ventilación           | Activación por humedad                       | ✅ Implementado                                 |
+| Iluminación por presencia        | Sensor PIR activa iluminación                | ✅ Implementado                                 |
+| Sensor ambiental DHT11          | Lectura periódica de temperatura y humedad   | ✅ Implementado                                 |
 
-### Control del motor DC
-
-- La banda transportadora será activada mediante un botón.  
-- El motor debe funcionar mientras el botón esté activado.
-
-### Lectura ambiental
-
-- Debe medir la temperatura y humedad con un sensor DHT11 en intervalos periódicos.
-
-### Control de ventilador
-
-- El ventilador se activará automáticamente si la humedad supera un umbral definido.
-
-### Iluminación por detección de movimiento
-
-- Cuando se detecte presencia humana, se encenderán los LEDs para iluminar el espacio.
-
-### Visualización o almacenamiento de los datos
-
-- Aunque no se ha especificado una interfaz, se pueden guardar los datos para futuras consultas o análisis (opcional).
+**Justificación del cambio:**  
+La banda transportadora fue descartada debido a limitaciones físicas en la maqueta, priorizando en cambio la fiabilidad de lectura ambiental, conteo, y sensores de movimiento. Todos los demás componentes fueron desarrollados e integrados de acuerdo con lo propuesto.
 
 ---
 
-## Requisitos no funcionales
+## Diagrama de bloques del hardware
 
-- 🔢 **Precisión del conteo**: El sistema debe asegurar que no haya errores durante la entrada o salida de productos.  
-- 🔄 **Confiabilidad en el procesamiento de datos**: El código debe manejar múltiples sensores sin errores.  
-- ⚡ **Respuestas confiables**: Las acciones del sistema deben ser coherentes con los valores leídos.  
-- 🔋 **Bajo consumo energético**: Se buscará eficiencia en los componentes, ideal para operación con baterías.  
-- 🧠 **Facilidad de uso**: Interfaz intuitiva con botón y sensores, mínima capacitación requerida.  
-- 🔧 **Mantenibilidad**: Código modular y documentado, fácil de modificar en el futuro.
+📌 *El sistema está compuesto por los siguientes bloques funcionales*:
 
----
+- Microcontrolador: Raspberry Pi Pico  
+- Sensor de temperatura y humedad: DHT11  
+- Sensores infrarrojos (x2): Conteo entrada/salida  
+- Sensor PIR: Activación de iluminación  
+- Ventilador: Activado por humedad  
+- LEDs: Iluminación controlada  
+- Botones: Control de activación (pruebas manuales)  
 
-## Escenario de pruebas
-
-Para validar el sistema se construirá una maqueta que simule un entorno de bodega alimentaria. Las pruebas incluirán:
-
-- ✔️ Simulación de entrada/salida de productos con objetos pasando por los sensores infrarrojos.  
-- ✔️ Activación de la banda con un botón físico, verificando el correcto funcionamiento del motor DC.  
-- ✔️ Simulación de condiciones ambientales, manipulando el sensor DHT11 con calor y frío.  
-- ✔️ Activación del ventilador bajo condiciones de alta humedad.  
-- ✔️ Prueba del sensor de movimiento con desplazamientos humanos simulados.  
-- ✔️ Monitoreo de todos los datos desde la Raspberry Pi Pico y verificación manual durante las pruebas.
+*💡 Diagrama disponible en el directorio `/docs/diagramas` del repositorio.*
 
 ---
 
-## Presupuesto
+## Diagrama de flujo del firmware
+
+📌 *Flujo lógico principal del programa:*
+
+1. Inicialización de GPIOs y sensores  
+2. Loop principal:
+   - Leer sensores IR y actualizar conteo  
+   - Leer sensor DHT11  
+   - Activar ventilador si humedad > 50%  
+   - Detectar movimiento con sensor PIR y activar LEDs  
+   - Revisar botón de prueba (si se conecta motor)  
+
+*💡 Diagrama en `/docs/diagrama_flujo.png`*
+
+---
+
+## Análisis del cumplimiento de requisitos
+
+### Requisitos funcionales
+
+| Requisito                            | Cumplido |
+|--------------------------------------|----------|
+| Conteo de productos IR               | ✅        |
+| Lectura de temperatura y humedad     | ✅        |
+| Activación de ventilador             | ✅        |
+| Iluminación por detección de PIR     | ✅        |
+| Activación de motor por botón        | ❌        |
+
+> 🔧 *El motor fue omitido en el prototipo final.*
+
+### Requisitos no funcionales
+
+| Requisito                            | Cumplido |
+|--------------------------------------|----------|
+| Precisión en conteo                  | ✅        |
+| Confiabilidad de procesamiento       | ✅        |
+| Bajo consumo energético              | ✅        |
+| Respuesta coherente a entradas       | ✅        |
+| Facilidad de uso                     | ✅        |
+| Mantenibilidad (modularidad del código) | ✅    |
+
+---
+
+## Uso de técnicas de polling e interrupciones
+
+| Funcionalidad                       | Técnica utilizada |
+|------------------------------------|-------------------|
+| Lectura del sensor DHT11           | Polling           |
+| Detección de objetos (IR)          | Polling           |
+| Activación por movimiento (PIR)    | Polling           |
+| Lectura de botones físicos         | Interrupciones    |
+
+---
+
+## Análisis de costos
+
+### Prototipo (maqueta de pruebas)
 
 | Componente                           | Estado      | Costo estimado (COP) |
 |-------------------------------------|-------------|-----------------------|
@@ -88,9 +122,30 @@ Para validar el sistema se construirá una maqueta que simule un entorno de bode
 | Ventilador                          | Adquirido   | 0                     |
 | Raspberry Pi Pico                   | Adquirida   | 0                     |
 | Material para maqueta               | A comprar   | 10,000                |
-| **Total estimado**                  |             | **17,000 COP**        |
+| **Total estimado prototipo**        |             | **17,000 COP**        |
 
-**Cobertura de costos:**  
-Los componentes han sido cubiertos previamente en otros proyectos o prácticas. Los costos adicionales (sensor de movimiento y maqueta) serán cubiertos por los integrantes del equipo.
+### Estimación de producción
+
+| Concepto                            | Costo unitario (COP) |
+|-------------------------------------|-----------------------|
+| Sensor PIR                          | 7,000                 |
+| Sensor IR x2                        | 5,000                 |
+| Motor DC                            | 2,000                 |
+| LEDs y resistencias                 | 500                   |
+| Sensor DHT11                        | 8,000                 |
+| Ventilador pequeño                  | 7,000                 |
+| Raspberry Pi Pico                   | 33,000                |
+| Caja o soporte físico               | 15,000                |
+| **Total estimado producción**       | **77,500 COP**        |
 
 ---
+
+## Sebastian Balbin Rivera
+
+- Equipo: *FoodCare*
+- Fecha: Julio 2025
+- Institución: Universidad de Antioquia – Facultad de Ingeniería
+
+---
+
+
